@@ -1,0 +1,97 @@
+unit Filt;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Unit1;
+
+type
+  TForm2 = class(TForm)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Button1: TButton;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    CheckBox3: TCheckBox;
+    CheckBox4: TCheckBox;
+    CheckBox5: TCheckBox;
+    CheckBox6: TCheckBox;
+    CheckBox7: TCheckBox;
+    CheckBox8: TCheckBox;
+    CheckBox9: TCheckBox;
+    CheckBox10: TCheckBox;
+    CheckBox11: TCheckBox;
+    CheckBox12: TCheckBox;
+    CheckBox13: TCheckBox;
+    CheckBox14: TCheckBox;
+    CheckBox15: TCheckBox;
+    CheckBox16: TCheckBox;
+    CheckBox17: TCheckBox;
+    CheckBox18: TCheckBox;
+    CheckBox19: TCheckBox;
+    CheckBox20: TCheckBox;
+    CheckBox21: TCheckBox;
+    CheckBox22: TCheckBox;
+    CheckBox23: TCheckBox;
+    CheckBox24: TCheckBox;
+    CheckBox25: TCheckBox;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form2: TForm2;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm2.Button1Click(Sender: TObject);
+begin
+//WU
+   if form2.CheckBox1.Checked then mainform.N25.Enabled:=true else mainform.N25.Enabled:=false;
+   if form2.CheckBox2.Checked then mainform.N26.Enabled:=true else mainform.N26.Enabled:=false;
+   if form2.CheckBox3.Checked then mainform.N38.Enabled:=true else mainform.N38.Enabled:=false;
+   if form2.CheckBox4.Checked then mainform.N24.Enabled:=true else mainform.N24.Enabled:=false;
+   if form2.CheckBox5.Checked then mainform.N23.Enabled:=true else mainform.N23.Enabled:=false;
+//U
+   if form2.CheckBox6.Checked then mainform.N28.Enabled:=true else mainform.N28.Enabled:=false;
+   if form2.CheckBox7.Checked then mainform.N29.Enabled:=true else mainform.N29.Enabled:=false;
+   if form2.CheckBox8.Checked then mainform.N30.Enabled:=true else mainform.N30.Enabled:=false;
+   if form2.CheckBox9.Checked then mainform.N31.Enabled:=true else mainform.N31.Enabled:=false;
+   if form2.CheckBox10.Checked then mainform.N49.Enabled:=true else mainform.N49.Enabled:=false;
+//BL
+   if form2.CheckBox11.Checked then mainform.N33.Enabled:=true else mainform.N33.Enabled:=false;
+   if form2.CheckBox12.Checked then mainform.N34.Enabled:=true else mainform.N34.Enabled:=false;
+   if form2.CheckBox13.Checked then mainform.N35.Enabled:=true else mainform.N35.Enabled:=false;
+   if form2.CheckBox14.Checked then mainform.N36.Enabled:=true else mainform.N36.Enabled:=false;
+   if form2.CheckBox15.Checked then mainform.N50.Enabled:=true else mainform.N50.Enabled:=false;
+//CT
+   if form2.CheckBox16.Checked then mainform.N39.Enabled:=true else mainform.N39.Enabled:=false;
+   if form2.CheckBox17.Checked then mainform.N40.Enabled:=true else mainform.N40.Enabled:=false;
+   if form2.CheckBox18.Checked then mainform.N41.Enabled:=true else mainform.N41.Enabled:=false;
+   if form2.CheckBox19.Checked then mainform.N42.Enabled:=true else mainform.N42.Enabled:=false;
+   if form2.CheckBox20.Checked then mainform.N51.Enabled:=true else mainform.N51.Enabled:=false;
+//MG
+   if form2.CheckBox21.Checked then mainform.N44.Enabled:=true else mainform.N44.Enabled:=false;
+   if form2.CheckBox22.Checked then mainform.N45.Enabled:=true else mainform.N45.Enabled:=false;
+   if form2.CheckBox23.Checked then mainform.N46.Enabled:=true else mainform.N46.Enabled:=false;
+   if form2.CheckBox24.Checked then mainform.N47.Enabled:=true else mainform.N47.Enabled:=false;
+   if form2.CheckBox25.Checked then mainform.N52.Enabled:=true else mainform.N52.Enabled:=false;
+
+   Form2.Close;
+end;
+
+end.

@@ -1,0 +1,227 @@
+unit Unit39;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls,adodb,db;
+type
+  TForm39 = class(TForm)
+    Label1: TLabel;
+    Label2: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    DateTimePicker3: TDateTimePicker;
+    Label5: TLabel;
+    Button1: TButton;
+    Edit1: TEdit;
+    Label3: TLabel;
+    Edit2: TEdit;
+    Label4: TLabel;
+    procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure DateTimePicker1Change(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+var
+  Form39: TForm39; ntm,ntd,ntm2,ntd2:string;
+implementation
+uses Unit14, Unit1, Unit26;
+{$R *.dfm}
+procedure TForm39.Button1Click(Sender: TObject);
+var tfs : tFormatSettings;
+    k:integer;
+    k2:string;
+    Zapros:TADOQuery;
+begin
+   tfs.DecimalSeparator:='.';
+   mPreviewForm.Memo1.Lines.Clear;
+   mPreviewForm.Memo1.Lines.Add('                                                                                                    ');
+   Zapros:=TADOQuery.Create(nil);
+   Zapros.Connection:=main.ADOConnection1;
+   Zapros.SQL.Clear;
+   Zapros.SQL.Add('SELECT * From data order by kodmspk,obl,kodval');
+   Zapros.Open;
+   Zapros.first;
+   k:=0;
+   while not(Zapros.Eof) do
+   begin
+      mPreviewForm.Memo1.Lines.Add('1'+vartostr(Zapros['kodmspk'])+vartostr(Zapros['kodval'])+vartostr(Zapros['kodotpr'])+vartostr(Zapros['kodvipl'])+'='+floattostr(Zapros['sumper']*100));
+      mPreviewForm.Memo1.Lines.Add('3'+vartostr(Zapros['kodmspk'])+vartostr(Zapros['kodval'])+vartostr(Zapros['kodotpr'])+vartostr(Zapros['kodvipl'])+'='+inttostr(Zapros['kolper']));
+      Zapros.next;
+      k:=k+1;
+   end;
+   k2:=inttostr(k*2);
+   while length(k2)<>9 do begin
+      insert('0',k2,1);
+   end;
+   mPreviewForm.Memo1.Lines.Insert(1,'09='+copy(datetostr(form39.DateTimePicker1.Date),1,2)+copy(datetostr(form39.DateTimePicker1.Date),4,2)+copy(datetostr(form39.DateTimePicker1.Date),7,4)
+   +'='+copy(datetostr(form39.DateTimePicker2.Date),1,2)+copy(datetostr(form39.DateTimePicker2.Date),4,2)+copy(datetostr(form39.DateTimePicker2.Date),7,4)
+   +'='+copy(datetostr(form39.DateTimePicker3.Date),1,2)+copy(datetostr(form39.DateTimePicker3.Date),4,2)+copy(datetostr(form39.DateTimePicker3.Date),7,4)
+   +'='+copy(datetostr(form39.DateTimePicker1.Date),1,2)+copy(datetostr(form39.DateTimePicker1.Date),4,2)+copy(datetostr(form39.DateTimePicker1.Date),7,4)
+   +'='+edit2.text+'=300926=21='
+   +k2
+   +'='+'#e91WF'+ntm2+ntd2+'.d11'
+   +'=      ='+'                                                                ');
+   mPreviewForm.Memo1.Lines.insert(2,'#1=300026');
+   Preview39.Memo1.Lines.Assign(mPreviewForm.Memo1.Lines);
+   mPreviewForm.Memo1.Lines.Clear;
+   Preview39.ShowModal;
+end;
+
+procedure TForm39.FormCreate(Sender: TObject);
+begin
+   ntd:=copy(datetostr(form39.DateTimePicker1.Date),1,2);
+   ntm:=copy(datetostr(form39.DateTimePicker1.Date),4,2);
+   case strtoint(ntm) of
+      1: ntm2:='1';
+      2: ntm2:='2';
+      3: ntm2:='3';
+      4: ntm2:='4';
+      5: ntm2:='5';
+      6: ntm2:='6';
+      7: ntm2:='7';
+      8: ntm2:='8';
+      9: ntm2:='9';
+     10: ntm2:='a';
+     11: ntm2:='b';
+     12: ntm2:='c';
+     13: ntm2:='d';
+     14: ntm2:='e';
+     15: ntm2:='f';
+     16: ntm2:='g';
+     17: ntm2:='h';
+     18: ntm2:='i';
+     19: ntm2:='j';
+     20: ntm2:='k';
+     21: ntm2:='l';
+     22: ntm2:='m';
+     23: ntm2:='n';
+     24: ntm2:='o';
+     25: ntm2:='p';
+     26: ntm2:='q';
+     27: ntm2:='r';
+     28: ntm2:='s';
+     29: ntm2:='t';
+     30: ntm2:='u';
+     31: ntm2:='v';
+   end;
+   case strtoint(ntd) of
+      1: ntd2:='1';
+      2: ntd2:='2';
+      3: ntd2:='3';
+      4: ntd2:='4';
+      5: ntd2:='5';
+      6: ntd2:='6';
+      7: ntd2:='7';
+      8: ntd2:='8';
+      9: ntd2:='9';
+     10: ntd2:='a';
+     11: ntd2:='b';
+     12: ntd2:='c';
+     13: ntd2:='d';
+     14: ntd2:='e';
+     15: ntd2:='f';
+     16: ntd2:='g';
+     17: ntd2:='h';
+     18: ntd2:='i';
+     19: ntd2:='j';
+     20: ntd2:='k';
+     21: ntd2:='l';
+     22: ntd2:='m';
+     23: ntd2:='n';
+     24: ntd2:='o';
+     25: ntd2:='p';
+     26: ntd2:='q';
+     27: ntd2:='r';
+     28: ntd2:='s';
+     29: ntd2:='t';
+     30: ntd2:='u';
+     31: ntd2:='v';
+   end;
+   form39.Edit1.Text:= '#e91WF'+ntm2+ntd2+'.d11';
+end;
+
+procedure TForm39.DateTimePicker1Change(Sender: TObject);
+begin
+   ntd:=copy(datetostr(form39.DateTimePicker1.Date),1,2);
+   ntm:=copy(datetostr(form39.DateTimePicker1.Date),4,2);
+   case strtoint(ntm) of
+      1: ntm2:='1';
+      2: ntm2:='2';
+      3: ntm2:='3';
+      4: ntm2:='4';
+      5: ntm2:='5';
+      6: ntm2:='6';
+      7: ntm2:='7';
+      8: ntm2:='8';
+      9: ntm2:='9';
+     10: ntm2:='a';
+     11: ntm2:='b';
+     12: ntm2:='c';
+     13: ntm2:='d';
+     14: ntm2:='e';
+     15: ntm2:='f';
+     16: ntm2:='g';
+     17: ntm2:='h';
+     18: ntm2:='i';
+     19: ntm2:='j';
+     20: ntm2:='k';
+     21: ntm2:='l';
+     22: ntm2:='m';
+     23: ntm2:='n';
+     24: ntm2:='o';
+     25: ntm2:='p';
+     26: ntm2:='q';
+     27: ntm2:='r';
+     28: ntm2:='s';
+     29: ntm2:='t';
+     30: ntm2:='u';
+     31: ntm2:='v';
+   end;
+   case strtoint(ntd) of
+      1: ntd2:='1';
+      2: ntd2:='2';
+      3: ntd2:='3';
+      4: ntd2:='4';
+      5: ntd2:='5';
+      6: ntd2:='6';
+      7: ntd2:='7';
+      8: ntd2:='8';
+      9: ntd2:='9';
+     10: ntd2:='a';
+     11: ntd2:='b';
+     12: ntd2:='c';
+     13: ntd2:='d';
+     14: ntd2:='e';
+     15: ntd2:='f';
+     16: ntd2:='g';
+     17: ntd2:='h';
+     18: ntd2:='i';
+     19: ntd2:='j';
+     20: ntd2:='k';
+     21: ntd2:='l';
+     22: ntd2:='m';
+     23: ntd2:='n';
+     24: ntd2:='o';
+     25: ntd2:='p';
+     26: ntd2:='q';
+     27: ntd2:='r';
+     28: ntd2:='s';
+     29: ntd2:='t';
+     30: ntd2:='u';
+     31: ntd2:='v';
+   end;
+   form39.Edit1.Text:= '#e91WF'+ntm2+ntd2+'.d11';
+end;
+
+procedure TForm39.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+   Action:=cafree;
+end;
+
+end.
