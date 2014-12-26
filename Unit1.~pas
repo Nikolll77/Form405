@@ -209,13 +209,48 @@ private
     { Private declarations }
   public
     { Public declarations }
-  end;
+    //10.8.6
+    procedure MG_ImportFromBase;
+end;
+
 var mainform: Tmainform;
 
 implementation
 
 uses Unit39, Unit22, Filt;
 {$R *.dfm}
+
+procedure Tmainform.MG_ImportFromBase;
+var Zapros:TADOQuery;
+begin
+   Zapros:=TADOQuery.Create(nil);
+   Zapros.Connection:=ADOConnection1;
+   try
+      Zapros.SQl.Clear;
+      Zapros.SQl.Add('DROP TABLE data\1.MG_TMP_S;');
+      Zapros.ExecSQL;
+   except   end;
+
+   try
+      Zapros.SQl.Clear;
+      Zapros.SQl.Add('DROP TABLE data\1.MG_TMP_R;');
+      Zapros.ExecSQL;
+   except   end;
+
+
+   Zapros.SQL.Clear;
+   Zapros.SQL.Add('SELECT AgentPNumb,AgentPName,"004" as kodmspk,codeCurrency as kodval,"804" as kodotpr, countryISO as kodvipl,1 as kolper,faceAmount as sumper, c_reg as obl INTO data\1.MG_TMP_S ');
+   Zapros.SQL.Add('FROM Import\base.Send');
+   Zapros.ExecSQL;
+
+
+   Zapros.SQL.Add('SELECT AgentPNumb,AgentPName,"004" as kodmspk,codeCurrency as kodval,countryLegasy as kodotpr, "804" as kodvipl,1 as kolper,receiveAmount as sumper, c_reg as obl INTO data\1.MG_TMP_R ');
+   Zapros.SQL.Add('FROM Import\base.Receive');
+   Zapros.ExecSQL;
+
+   FreeAndNil(Zapros);
+end;
+
 
 {Звіт по 405 формі - звичайного зразка}
 procedure Tmainform.N4Click(Sender: TObject);
@@ -1363,7 +1398,11 @@ var s,ss,str,kodval,kodotpr,kodvipl:string;
     fv:textfile;
     flag:boolean;
 begin
-    if MessageDlg('Очистить базу перед импортом?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+   s := GetCurrentDir;
+   MG_ImportFromBase;
+
+   
+{    if MessageDlg('Очистить базу перед импортом?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
     begin
       Zapros:=TADOQuery.Create(nil);
       Zapros.Connection:=ADOConnection1;
@@ -1413,7 +1452,9 @@ begin
                                      Zapros.Post;
                                   end;
       end;
-   end;
+   end;           }
+
+
    SetCurrentDir(s);
 end;
 
@@ -2078,7 +2119,7 @@ begin
       Zapros2['kodotpr']:=Zapros['kodotpr'];
       Zapros2['kodvipl']:=Zapros['kodvipl'];
       Zapros2['obl']:=Zapros['obl'];
-      Zapros2['agent']:=Zapros['agent_new'];
+      Zapros2['agent_new']:=Zapros['agent_new'];
       Zapros2.Post;
       Zapros.Next;
    end;
@@ -2097,7 +2138,7 @@ begin
       Zapros2['kodotpr']:=Zapros['kodotpr'];
       Zapros2['kodvipl']:=Zapros['kodvipl'];
       Zapros2['obl']:=Zapros['obl'];
-      Zapros2['agent']:=Zapros['agent_new'];
+      Zapros2['agent_new']:=Zapros['agent_new'];
       Zapros2.Post;
       Zapros.Next;
    end;
@@ -2117,7 +2158,7 @@ begin
       Zapros2['kodotpr']:=Zapros['kodotpr'];
       Zapros2['kodvipl']:=Zapros['kodvipl'];
       Zapros2['obl']:=Zapros['obl'];
-      Zapros2['agent']:=Zapros['agent_new'];
+      Zapros2['agent_new']:=Zapros['agent_new'];
       Zapros2.Post;
       Zapros.Next;
    end;
@@ -2137,7 +2178,7 @@ begin
       Zapros2['kodotpr']:=Zapros['kodotpr'];
       Zapros2['kodvipl']:=Zapros['kodvipl'];
       Zapros2['obl']:=Zapros['obl'];
-      Zapros2['agent']:=Zapros['agent_new'];
+      Zapros2['agent_new']:=Zapros['agent_new'];
       Zapros2.Post;
       Zapros.Next;
    end;

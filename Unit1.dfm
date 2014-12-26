@@ -1,6 +1,6 @@
 object mainform: Tmainform
-  Left = 230
-  Top = 192
+  Left = 431
+  Top = 277
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = '405 '#1060#1086#1088#1084#1072
