@@ -1,6 +1,6 @@
 object mainform: Tmainform
-  Left = 431
-  Top = 277
+  Left = 585
+  Top = 243
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = '405 '#1060#1086#1088#1084#1072
@@ -313,6 +313,12 @@ object mainform: Tmainform
             Title.Alignment = taCenter
             Title.Caption = #1056#1077#1075#1080#1086#1085
             Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'agent_new'
+            Title.Caption = #1040#1075#1077#1085#1090
+            Visible = True
           end>
       end
     end
@@ -400,6 +406,12 @@ object mainform: Tmainform
             Title.Alignment = taCenter
             Title.Caption = #1056#1077#1075#1080#1086#1085
             Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'agent_new'
+            Title.Caption = #1040#1075#1077#1085#1090
+            Visible = True
           end>
       end
     end
@@ -410,7 +422,7 @@ object mainform: Tmainform
         Left = 0
         Top = 0
         Width = 841
-        Height = 508
+        Height = 509
         Align = alClient
         Color = 16776176
         DataSource = DataSource4
@@ -481,6 +493,12 @@ object mainform: Tmainform
             FieldName = 'obl'
             Title.Alignment = taCenter
             Title.Caption = #1056#1077#1075#1080#1086#1085
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'agent_new'
+            Title.Caption = #1040#1075#1077#1085#1090
             Visible = True
           end>
       end
@@ -566,6 +584,15 @@ object mainform: Tmainform
             FieldName = 'obl'
             Title.Alignment = taCenter
             Title.Caption = #1056#1077#1075#1080#1086#1085
+            Width = 59
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'agent_new'
+            Title.Alignment = taCenter
+            Title.Caption = #1040#1075#1077#1085#1090
             Visible = True
           end>
       end
@@ -652,6 +679,12 @@ object mainform: Tmainform
             Title.Alignment = taCenter
             Title.Caption = #1056#1077#1075#1080#1086#1085
             Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'agent_new'
+            Title.Caption = #1040#1075#1077#1085#1090
+            Visible = True
           end>
       end
     end
@@ -662,7 +695,7 @@ object mainform: Tmainform
         Left = 0
         Top = 0
         Width = 841
-        Height = 508
+        Height = 509
         Align = alClient
         DataSource = DataSource8
         TabOrder = 0
@@ -1074,6 +1107,7 @@ object mainform: Tmainform
     Top = 161
   end
   object WU: TADOQuery
+    Active = True
     Connection = ADOConnection1
     CursorType = ctStatic
     Parameters = <>
