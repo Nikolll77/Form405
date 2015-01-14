@@ -211,7 +211,6 @@ private
     { Public declarations }
     //10.8.6
     procedure MG_ImportFromBase;
-    procedure createDATAMG;
 end;
 
 var mainform: Tmainform;
@@ -220,27 +219,6 @@ implementation
 
 uses Unit39, Unit22, Filt;
 {$R *.dfm}
-
-procedure Tmainform.createDATAMG;
-var Zapros:TADOQuery;
-begin
-   Zapros:=TADOQuery.Create(nil);
-   Zapros.Connection:=ADOConnection1;
-   try
-      Zapros.SQl.Clear;
-      Zapros.SQl.Add('DROP TABLE data\1.DATAMG');
-      Zapros.ExecSQL;
-   except   end;
-
-   Zapros.SQL.Clear;
-   Zapros.SQL.Add('SELECT MG_list.kodmspk, MG_list.kodval, MG_list.kodotpr, MG_list.kodvipl, Sum(MG_list.kolp) AS kolper, Sum(MG_list.sump) AS sumper, MG_list.obl, MG_list.agent_new INTO DATAMG');
-   Zapros.SQL.Add('FROM MG_list');
-   Zapros.SQL.Add('GROUP BY MG_list.kodmspk, MG_list.kodval, MG_list.kodotpr, MG_list.kodvipl, MG_list.obl, MG_list.agent_new');
-   Zapros.ExecSQL;
-
-   FreeAndNil(Zapros);
-end;
-
 
 procedure Tmainform.MG_ImportFromBase;
 var Zapros:TADOQuery;
@@ -1614,9 +1592,7 @@ end;
 procedure Tmainform.RIA4Click(Sender: TObject);
 var Zapros,Zapros2:TADOQuery;
 begin
-
-CreateDATAMG;
-{   Zapros:=TADOQuery.Create(nil);
+   Zapros:=TADOQuery.Create(nil);
    Zapros.Connection:=ADOConnection1;
    Zapros2:=TADOQuery.Create(nil);
    Zapros2.Connection:=ADOConnection1;
@@ -1651,7 +1627,7 @@ CreateDATAMG;
       Zapros2.Next;
    end;
    DataSource3.DataSet:=Zapros;
-   label2.Caption:=inttostr(Zapros.RecordCount);}
+   label2.Caption:=inttostr(Zapros.RecordCount);
 end;
 
 procedure Tmainform.MoneyGram3Click(Sender: TObject);
