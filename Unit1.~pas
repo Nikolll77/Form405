@@ -1009,9 +1009,70 @@ end;
 
 procedure Tmainform.e921Click(Sender: TObject);
 var f:textfile; Zapros,Zapros2:TADOQuery;
+LW1,LW2:string;
+CC:string;
+A:string;
+ZZZZZZZZZZ:string;
+NN:string;
+VVV:string;
+MMM:string;
+KKK:string;
+DDD:string;
+PPP:string;
 begin
-   Zapros:=TADOQuery.Create(nil);
+ Zapros:=TADOQuery.Create(nil);
+ Zapros.Connection:=ADOConnection1;
+
+ assignfile(f,'data/e9.txt');
+ rewrite(f);
+
+ with Zapros do
+ begin
+      SQL.Clear;
+      SQL.Add('SELECT agent_new,kodmspk,kodval,kodotpr,kodvipl,SUM(kolper)as kp,SUM(sumper) as sm,obl');
+      SQL.Add('FROM data');
+      SQL.Add('GROUP by agent_new,kodmspk,kodval,kodotpr,kodvipl,obl;');
+
+      end;
+      Zapros.Open;
+      while not(Zapros.Eof) do
+      begin
+        CC:=Zapros['kodmspk'];
+ZZZZZZZZZZ:=Zapros['agent_new'];
+            if ZZZZZZZZZZ='0014285934' then
+        A:='1' else A:='3';
+            if ZZZZZZZZZZ='0014285934' then
+            begin
+        LW1:='11';
+        LW2:='31';
+            end
+            else
+            begin
+        LW1:='12';
+        LW2:='32';
+            end;
+
+
+        NN:='00';
+       VVV:=Zapros['kodval'];
+       MMM:=Zapros['kodotpr'];
+            if MMM='804' then
+       KKK:='000' else KKK:=Zapros['obl'];
+       DDD:=Zapros['kodvipl'];
+             if DDD='804' then
+       PPP:='000' else PPP:=Zapros['obl'];
+
+         writeln(f,LW1+CC+A+ZZZZZZZZZZ+NN+VVV+MMM+KKK+DDD+PPP+'='+floattostr(Zapros['sm']*100));
+         writeln(f,LW2+CC+A+ZZZZZZZZZZ+NN+VVV+MMM+KKK+DDD+PPP+'='+floattostr(Zapros['sm']*100));
+         //writeln(f,'31'+Zapros['kodmspk']+Zapros['kodval']+Zapros['kodotpr']+Zapros['kodvipl']+'='+inttostr(Zapros['kp']));
+         Zapros.Next;
+      end;
+      Zapros.Close;
+
+
+{   Zapros:=TADOQuery.Create(nil);
    Zapros.Connection:=ADOConnection1;
+
    Zapros2:=TADOQuery.Create(nil);
    Zapros2.Connection:=ADOConnection1;
    assignfile(f,'data/e9.txt');
@@ -1047,7 +1108,8 @@ begin
    closefile(f);
    Zapros.Free;
    Zapros2.Close;
-   Zapros2.Free;
+   Zapros2.Free;}
+
    Showmessage('Новый файл создан!');
 end;
 

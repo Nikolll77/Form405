@@ -1043,6 +1043,7 @@ object mainform: Tmainform
       end
       object e91: TMenuItem
         Caption = '#e9 '#1089' '#1079#1072#1075#1086#1083#1086#1074#1082#1086#1084'  ('#1076#1083#1103' '#1053#1041#1059')'
+        Visible = False
         OnClick = e91Click
       end
       object N20: TMenuItem

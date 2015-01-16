@@ -1,6 +1,6 @@
 object mainform: Tmainform
-  Left = 585
-  Top = 243
+  Left = 226
+  Top = 183
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = '405 '#1060#1086#1088#1084#1072
@@ -94,7 +94,7 @@ object mainform: Tmainform
     Top = 33
     Width = 849
     Height = 537
-    ActivePage = TabSheet1
+    ActivePage = TabSheet9
     Align = alClient
     HotTrack = True
     MultiLine = True
@@ -318,6 +318,7 @@ object mainform: Tmainform
             Expanded = False
             FieldName = 'agent_new'
             Title.Caption = #1040#1075#1077#1085#1090
+            Width = 120
             Visible = True
           end>
       end
@@ -411,6 +412,7 @@ object mainform: Tmainform
             Expanded = False
             FieldName = 'agent_new'
             Title.Caption = #1040#1075#1077#1085#1090
+            Width = 120
             Visible = True
           end>
       end
@@ -499,6 +501,7 @@ object mainform: Tmainform
             Expanded = False
             FieldName = 'agent_new'
             Title.Caption = #1040#1075#1077#1085#1090
+            Width = 120
             Visible = True
           end>
       end
@@ -593,6 +596,7 @@ object mainform: Tmainform
             FieldName = 'agent_new'
             Title.Alignment = taCenter
             Title.Caption = #1040#1075#1077#1085#1090
+            Width = 120
             Visible = True
           end>
       end
@@ -684,6 +688,7 @@ object mainform: Tmainform
             Expanded = False
             FieldName = 'agent_new'
             Title.Caption = #1040#1075#1077#1085#1090
+            Width = 120
             Visible = True
           end>
       end
@@ -1038,6 +1043,7 @@ object mainform: Tmainform
       end
       object e91: TMenuItem
         Caption = '#e9 '#1089' '#1079#1072#1075#1086#1083#1086#1074#1082#1086#1084'  ('#1076#1083#1103' '#1053#1041#1059')'
+        Visible = False
         OnClick = e91Click
       end
       object N20: TMenuItem
