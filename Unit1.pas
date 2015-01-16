@@ -137,6 +137,9 @@ type
     N61: TMenuItem;
     N62: TMenuItem;
     N63: TMenuItem;
+    N40511: TMenuItem;
+    N40521: TMenuItem;
+    N40522: TMenuItem;
     procedure N4Click(Sender: TObject);
     procedure N391Click(Sender: TObject);
     procedure PageControl1Change(Sender: TObject);
@@ -205,6 +208,9 @@ type
     procedure N61Click(Sender: TObject);
     procedure N62Click(Sender: TObject);
     procedure N63Click(Sender: TObject);
+    procedure N40511Click(Sender: TObject);
+    procedure N40521Click(Sender: TObject);
+    procedure N40522Click(Sender: TObject);
 private
     { Private declarations }
   public
@@ -261,12 +267,12 @@ begin
 
 
    Zapros.SQL.Clear;
-   Zapros.SQL.Add('SELECT AgentPNumb,AgentPName,"004" as kodmspk,codeCurrency as kodval,"804" as kodotpr, countryISO as kodvipl,1 as kolper,faceAmount as sumper, c_reg as obl INTO data\1.MG_TMP_S ');
+   Zapros.SQL.Add('SELECT AgentPNumb,AgentPName,"04" as kodmspk,codeCurrency as kodval,"804" as kodotpr, countryISO as kodvipl,1 as kolper,faceAmount as sumper, c_reg as obl INTO data\1.MG_TMP_S ');
    Zapros.SQL.Add('FROM Import\base.Send');
    Zapros.ExecSQL;
 
    Zapros.SQL.Clear;
-   Zapros.SQL.Add('SELECT AgentPNumb,AgentPName,"004" as kodmspk,codeCurrency as kodval,countryLegasy as kodotpr, "804" as kodvipl,1 as kolper,receiveAmount as sumper, c_reg as obl INTO data\1.MG_TMP_R ');
+   Zapros.SQL.Add('SELECT AgentPNumb,AgentPName,"04" as kodmspk,codeCurrency as kodval,countryLegasy as kodotpr, "804" as kodvipl,1 as kolper,receiveAmount as sumper, c_reg as obl INTO data\1.MG_TMP_R ');
    Zapros.SQL.Add('FROM Import\base.Receive');
    Zapros.ExecSQL;
 
@@ -1019,7 +1025,9 @@ MMM:string;
 KKK:string;
 DDD:string;
 PPP:string;
+i:integer;
 begin
+
  Zapros:=TADOQuery.Create(nil);
  Zapros.Connection:=ADOConnection1;
 
@@ -1035,6 +1043,7 @@ begin
 
       end;
       Zapros.Open;
+      ShowMessage(IntToStr(Zapros.RecordCount));
       while not(Zapros.Eof) do
       begin
         CC:=Zapros['kodmspk'];
@@ -1056,18 +1065,20 @@ ZZZZZZZZZZ:=Zapros['agent_new'];
         NN:='00';
        VVV:=Zapros['kodval'];
        MMM:=Zapros['kodotpr'];
+       i:=Zapros['obl'];
             if MMM='804' then
-       KKK:='000' else KKK:=Zapros['obl'];
+       KKK:='000' else KKK:=Format('%.3d', [i]);
        DDD:=Zapros['kodvipl'];
              if DDD='804' then
-       PPP:='000' else PPP:=Zapros['obl'];
-
+       PPP:='000' else PPP:=Format('%.3d', [i]);
          writeln(f,LW1+CC+A+ZZZZZZZZZZ+NN+VVV+MMM+KKK+DDD+PPP+'='+floattostr(Zapros['sm']*100));
          writeln(f,LW2+CC+A+ZZZZZZZZZZ+NN+VVV+MMM+KKK+DDD+PPP+'='+inttostr(Zapros['kp']));
          //writeln(f,'31'+Zapros['kodmspk']+Zapros['kodval']+Zapros['kodotpr']+Zapros['kodvipl']+'='+inttostr(Zapros['kp']));
          Zapros.Next;
       end;
       Zapros.Close;
+   closefile(f);
+   Zapros.Free;
 
 
 {   Zapros:=TADOQuery.Create(nil);
@@ -2472,6 +2483,127 @@ begin
    end;
    Zapros.Open;
    DataSource1.DataSet:=Zapros;
+end;
+
+procedure Tmainform.N40511Click(Sender: TObject);
+var s,s1,ss:string; mt1,mt:integer; Zapros,Zapros2:TADOQuery; ii:integer;
+begin
+   Zapros:=TADOQuery.Create(nil);
+   Zapros.Connection:=ADOConnection1;
+
+
+   s:=datetostr(MainForm.DateTimePicker1.Date);
+   s1:=copy(s,4,2);
+   mt1:=strtoint(s1);
+   case mt1 of
+      1,2,3: mt:=4;
+      4,5,6: mt:=1;
+      7,8,9: mt:=2;
+      10,11,12: mt:=3;
+   end;
+   if mt=4 then frxReport1.Script.Variables['yearnow'] := FormatDateTime('yyyy',MainForm.DateTimePicker1.Date-100)
+   else frxReport1.Script.Variables['yearnow'] := FormatDateTime('yyyy',MainForm.DateTimePicker1.Date);
+   frxReport1.Script.Variables['kvartal'] := mt;
+   frxReport1.PreviewPages.Clear;
+
+   with Zapros do
+      begin
+         SQL.Clear;
+         SQL.Add('SELECT agent_new,kodmspk,kodval,kodotpr,kodvipl,SUM(kolper)as kp,SUM(sumper) as sm,obl');
+         SQL.Add('FROM data');
+         SQL.Add('where kodotpr=kodvipl'); //kodotpr,kodvipl='804'
+         SQL.Add('GROUP by agent_new,kodmspk,kodval,kodotpr,kodvipl,obl;');
+
+      end;
+      Zapros.Open;
+   if not(Zapros.IsEmpty) then
+      begin
+         frxDBDataset1.DataSet:=Zapros;
+         frxReport1.LoadFromFile('data\part1.fr3');
+         frxReport1.ShowReport;
+      end;
+end;
+
+procedure Tmainform.N40521Click(Sender: TObject);
+var s,s1,ss:string; mt1,mt:integer; Zapros,Zapros2:TADOQuery; ii:integer;
+begin
+   Zapros:=TADOQuery.Create(nil);
+   Zapros.Connection:=ADOConnection1;
+
+
+   s:=datetostr(MainForm.DateTimePicker1.Date);
+   s1:=copy(s,4,2);
+   mt1:=strtoint(s1);
+   case mt1 of
+      1,2,3: mt:=4;
+      4,5,6: mt:=1;
+      7,8,9: mt:=2;
+      10,11,12: mt:=3;
+   end;
+   if mt=4 then frxReport1.Script.Variables['yearnow'] := FormatDateTime('yyyy',MainForm.DateTimePicker1.Date-100)
+   else frxReport1.Script.Variables['yearnow'] := FormatDateTime('yyyy',MainForm.DateTimePicker1.Date);
+   frxReport1.Script.Variables['kvartal'] := mt;
+   frxReport1.PreviewPages.Clear;
+
+   with Zapros do
+      begin
+         SQL.Clear;
+         SQL.Add('SELECT agent_new,kodmspk,kodval,kodotpr,kodvipl,SUM(kolper)as kp,SUM(sumper) as sm,obl');
+         SQL.Add('FROM data');
+         SQL.Add('where (kodvipl="804") and (kodotpr<>"804")'); //kodotpr,kodvipl='804'
+         SQL.Add('GROUP by agent_new,kodmspk,kodval,kodotpr,kodvipl,obl;');
+
+
+      end;
+      Zapros.Open;
+   if not(Zapros.IsEmpty) then
+      begin
+         frxDBDataset1.DataSet:=Zapros;
+         frxReport1.LoadFromFile('data\part2.fr3');
+         frxReport1.ShowReport;
+     end;
+
+end;
+
+procedure Tmainform.N40522Click(Sender: TObject);
+var s,s1,ss:string; mt1,mt:integer; Zapros,Zapros2:TADOQuery; ii:integer;
+begin
+   Zapros:=TADOQuery.Create(nil);
+   Zapros.Connection:=ADOConnection1;
+
+
+   s:=datetostr(MainForm.DateTimePicker1.Date);
+   s1:=copy(s,4,2);
+   mt1:=strtoint(s1);
+   case mt1 of
+      1,2,3: mt:=4;
+      4,5,6: mt:=1;
+      7,8,9: mt:=2;
+      10,11,12: mt:=3;
+   end;
+   if mt=4 then frxReport1.Script.Variables['yearnow'] := FormatDateTime('yyyy',MainForm.DateTimePicker1.Date-100)
+   else frxReport1.Script.Variables['yearnow'] := FormatDateTime('yyyy',MainForm.DateTimePicker1.Date);
+   frxReport1.Script.Variables['kvartal'] := mt;
+   frxReport1.PreviewPages.Clear;
+
+   with Zapros do
+      begin
+         SQL.Clear;
+         SQL.Add('SELECT agent_new,kodmspk,kodval,kodotpr,kodvipl,SUM(kolper)as kp,SUM(sumper) as sm,obl');
+         SQL.Add('FROM data');
+         SQL.Add('where (kodotpr="804") and (kodvipl<>"804")'); //kodotpr,kodvipl='804'
+         SQL.Add('GROUP by agent_new,kodmspk,kodval,kodotpr,kodvipl,obl;');
+
+
+      end;
+      Zapros.Open;
+   if not(Zapros.IsEmpty) then
+      begin
+         frxDBDataset1.DataSet:=Zapros;
+         frxReport1.LoadFromFile('data\part3.fr3');
+         frxReport1.ShowReport;
+     end;
+
 end;
 
 end.
