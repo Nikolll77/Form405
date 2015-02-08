@@ -7,7 +7,8 @@ uses
   Unit39 in 'Unit39.pas' {Form39},
   Unit14 in 'Unit14.pas' {mPreviewForm},
   Unit22 in 'Unit22.pas',
-  SimpleXML in 'SimpleXML.pas';
+  SimpleXML in 'SimpleXML.pas',
+  ProcessForm in 'ProcessForm.pas' {ProcessFrm};
 
 {$R *.res}
 
@@ -17,5 +18,6 @@ begin
   Application.CreateForm(Tmainform, mainform);
   Application.CreateForm(TPreview39, Preview39);
   Application.CreateForm(TmPreviewForm, mPreviewForm);
+  Application.CreateForm(TProcessFrm, ProcessFrm);
   Application.Run;
 end.

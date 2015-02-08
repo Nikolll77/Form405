@@ -73,7 +73,6 @@ type
     CT: TADOQuery;
     RIA: TADOQuery;
     UNI: TADOQuery;
-    DBNavigator1: TDBNavigator;
     data: TADOQuery;
     DataSource7: TDataSource;
     frxReport1: TfrxReport;
@@ -140,6 +139,10 @@ type
     N40511: TMenuItem;
     N40521: TMenuItem;
     N40522: TMenuItem;
+    DBNavigator1: TDBNavigator;
+    N64: TMenuItem;
+    N65: TMenuItem;
+    N66: TMenuItem;
     procedure N4Click(Sender: TObject);
     procedure N391Click(Sender: TObject);
     procedure PageControl1Change(Sender: TObject);
@@ -211,6 +214,9 @@ type
     procedure N40511Click(Sender: TObject);
     procedure N40521Click(Sender: TObject);
     procedure N40522Click(Sender: TObject);
+    procedure N64Click(Sender: TObject);
+    procedure N65Click(Sender: TObject);
+    procedure N66Click(Sender: TObject);
 private
     { Private declarations }
   public
@@ -224,7 +230,7 @@ var mainform: Tmainform;
 
 implementation
 
-uses Unit39, Unit22, Filt;
+uses Unit39, Unit22, Filt, ProcessForm, Math;
 {$R *.dfm}
 
 procedure Tmainform.createDATAMG;
@@ -1014,7 +1020,7 @@ begin
 end;
 
 procedure Tmainform.e921Click(Sender: TObject);
-var f:textfile; Zapros,Zapros2:TADOQuery;
+var fl:textfile; Zapros,Zapros2:TADOQuery;
 LW1,LW2:string;
 CC:string;
 A:string;
@@ -1025,14 +1031,18 @@ MMM:string;
 KKK:string;
 DDD:string;
 PPP:string;
+F:string;
+resstr:string;
+filename:string;
 i:integer;
+errors:boolean;
 begin
-
+ errors:=false;
  Zapros:=TADOQuery.Create(nil);
  Zapros.Connection:=ADOConnection1;
-
- assignfile(f,'data/e9.txt');
- rewrite(f);
+ filename:='data/e9.txt';
+ assignfile(fl,filename);
+ rewrite(fl);
 
  with Zapros do
  begin
@@ -1043,13 +1053,26 @@ begin
 
       end;
       Zapros.Open;
-      ShowMessage(IntToStr(Zapros.RecordCount));
+      //ShowMessage(IntToStr(Zapros.RecordCount));
+      ProcessFrm.show;
+      ProcessFrm.Memo1.Lines.Clear;
+      ProcessFrm.Memo1.lines.add('Создание Е9, '+IntToStr(Zapros.RecordCount)+' записей');
       while not(Zapros.Eof) do
       begin
+
+         ProcessFrm.StatusBar1.Panels[1].Text:=IntToStr(zapros.RecNo);
+         Application.ProcessMessages;
+
+         CC:='-';ZZZZZZZZZZ:='-';A:='-';
+         LW1:='-';LW2:='-'; F:='-'; NN:='-';
+         VVV:='-'; MMM:='-';
+         KKK:='-';DDD:='-';PPP:='-';
+      try
         CC:=Zapros['kodmspk'];
 ZZZZZZZZZZ:=Zapros['agent_new'];
             if ZZZZZZZZZZ='0014285934' then
         A:='1' else A:='3';
+        {
             if ZZZZZZZZZZ='0014285934' then
             begin
         LW1:='11';
@@ -1059,26 +1082,62 @@ ZZZZZZZZZZ:=Zapros['agent_new'];
             begin
         LW1:='12';
         LW2:='32';
-            end;
+            end;   }
+       LW1:='11';
+       LW2:='31';
+        F:='2';
+       NN:='00';
 
 
-        NN:='00';
        VVV:=Zapros['kodval'];
        MMM:=Zapros['kodotpr'];
        i:=Zapros['obl'];
+
             if MMM='804' then
-       KKK:='000' else KKK:=Format('%.3d', [i]);
+       KKK:=Format('%.3d', [i]) else KKK:='000';
        DDD:=Zapros['kodvipl'];
              if DDD='804' then
        PPP:='000' else PPP:=Format('%.3d', [i]);
-         writeln(f,LW1+CC+A+ZZZZZZZZZZ+NN+VVV+MMM+KKK+DDD+PPP+'='+floattostr(Zapros['sm']*100));
-         writeln(f,LW2+CC+A+ZZZZZZZZZZ+NN+VVV+MMM+KKK+DDD+PPP+'='+inttostr(Zapros['kp']));
+       except
+          ProcessFrm.Memo1.Lines.add('Ошибка чтения данных! Проверьте на ошибки!');
+          resstr:=LW1+CC+F+A+ZZZZZZZZZZ+NN+VVV+MMM+KKK+DDD+PPP;
+          ProcessFrm.Memo1.Lines.add(resstr);
+          errors:=true;
+          Break;
+       end;
+
+
+       resstr:=CC+F+A+ZZZZZZZZZZ+NN+VVV+MMM+KKK+DDD+PPP;
+
+       If length(resstr)<>31 then
+       begin
+          ProcessFrm.Memo1.Lines.add('Ошибка длинны строки:');
+          ProcessFrm.Memo1.Lines.add(LW1+resstr);
+          errors:=true;
+          Break;
+       end;
+
+         writeln(fl,LW1+resstr+'='+floattostr(Zapros['sm']*100));
+         writeln(fl,LW2+resstr+'='+inttostr(Zapros['kp']));
          //writeln(f,'31'+Zapros['kodmspk']+Zapros['kodval']+Zapros['kodotpr']+Zapros['kodvipl']+'='+inttostr(Zapros['kp']));
+
          Zapros.Next;
+
       end;
       Zapros.Close;
-   closefile(f);
-   Zapros.Free;
+      Zapros.Free;
+      closefile(fl);
+
+   if not errors then
+   begin
+       ProcessFrm.Close;
+       Showmessage('Файл Е9 создан!');
+   end
+   else
+   begin
+      DeleteFile(filename);
+      ProcessFrm.Memo1.Lines.add('Файл Е9 НЕ создан!');
+   end;
 
 
 {   Zapros:=TADOQuery.Create(nil);
@@ -1121,7 +1180,7 @@ ZZZZZZZZZZ:=Zapros['agent_new'];
    Zapros2.Close;
    Zapros2.Free;}
 
-   Showmessage('Новый файл создан!');
+   //Showmessage('Новый файл создан!');
 end;
 
 procedure Tmainform.Contact1Click(Sender: TObject);
@@ -1678,7 +1737,7 @@ begin
    with Zapros do
    begin
       SQL.Clear;
-      SQL.Add('SELECT * FROM DataMG WHERE obl=0;');
+      SQL.Add('SELECT * FROM DataMG WHERE (obl="0") or (obl is null);');
    end;
    Zapros.Open;
    DataSource2.DataSet:=Zapros;
@@ -2339,8 +2398,8 @@ begin
    Zapros:=TADOQuery.Create(nil);
    Zapros.Connection:=ADOConnection1;
    Zapros.SQL.Clear;
-   Zapros.SQL.Add('SELECT kodmspk,kodval,SUM(IIF(kodotpr="804",sumper,0)) as ss1,SUM(IIF(kodotpr<>"804",sumper,0)) as ss2,SUM(IIF(kodotpr="804",kolper,0)) as kk1,SUM(IIF(kodotpr<>"804",kolper,0)) as kk2');
-   Zapros.SQL.Add('FROM data GROUP by kodmspk,kodval;');
+   Zapros.SQL.Add('SELECT agent_new,kodmspk,kodval,SUM(IIF(kodotpr="804",sumper,0)) as ss1,SUM(IIF(kodotpr<>"804",sumper,0)) as ss2,SUM(IIF(kodotpr="804",kolper,0)) as kk1,SUM(IIF(kodotpr<>"804",kolper,0)) as kk2');
+   Zapros.SQL.Add('FROM data GROUP by agent_new,kodmspk,kodval;');
    Zapros.Open;
    frxDBDataset2.DataSet:=Zapros;
    frxReport1.PreviewPages.Clear;
@@ -2403,6 +2462,7 @@ end;
 procedure Tmainform.N16Click(Sender: TObject);
 var Zapros:TADOQuery;
 begin
+
    Zapros:=TADOQuery.Create(nil);
    Zapros.Connection:=ADOConnection1;
    with Zapros do
@@ -2460,15 +2520,22 @@ end;
 procedure Tmainform.N62Click(Sender: TObject);
 var Zapros:TADOQuery;
 begin
+   PageControl1.ActivePage:=PageControl1.Pages[4];
    Zapros:=TADOQuery.Create(nil);
    Zapros.Connection:=ADOConnection1;
    with Zapros do
    begin
       SQL.Clear;
-      SQL.Add('SELECT * FROM DataMG WHERE (LEN(kodvipl)<3)or(LEN(kodotpr)<3) ;');
+//      SQL.Add('SELECT * FROM DataMG WHERE (LEN(kodvipl)<3)or(LEN(kodotpr)<3) ;');
+      SQL.Add('SELECT distinct  MG_TMP_R.kodotpr, "" as kodvipl');
+      SQL.Add('FROM MG_TMP_R LEFT JOIN K040 ON MG_TMP_R.kodotpr=K040.KOD_LIT');
+      SQL.Add('WHERE (((K040.KOD_LIT) Is Null));');
+      SQL.Add('UNION SELECT  "" as kodotpr, MG_TMP_S.kodvipl');
+      SQL.Add('FROM MG_TMP_S LEFT JOIN K040 ON MG_TMP_S.kodvipl=K040.KOD_LIT');
+      SQL.Add('WHERE (((K040.KOD_LIT) Is Null));');
    end;
    Zapros.Open;
-   DataSource1.DataSet:=Zapros;
+   DataSource2.DataSet:=Zapros;
 end;
 
 procedure Tmainform.N63Click(Sender: TObject);
@@ -2603,6 +2670,58 @@ begin
          frxReport1.LoadFromFile('data\part3.fr3');
          frxReport1.ShowReport;
      end;
+
+end;
+
+procedure Tmainform.N64Click(Sender: TObject);
+var Zapros:TADOQuery;
+begin
+   PageControl1.ActivePage:=PageControl1.Pages[4];
+   Zapros:=TADOQuery.Create(nil);
+   Zapros.Connection:=ADOConnection1;
+   with Zapros do
+   begin
+      SQL.Clear;
+      SQL.Add('SELECT DISTINCT MG_list.AgentPName+" "+MG_list.AgentPNumb as agent_new');
+      SQL.Add('FROM MG_list');
+      SQL.Add('WHERE (((MG_list.agent_new) Is Null));');
+   end;
+   Zapros.Open;
+   DataSource2.DataSet:=Zapros;
+end;
+
+procedure Tmainform.N65Click(Sender: TObject);
+var Zapros:TADOQuery;
+begin
+   PageControl1.ActivePage:=PageControl1.Pages[4];
+   Zapros:=TADOQuery.Create(nil);
+   Zapros.Connection:=ADOConnection1;
+   with Zapros do
+   begin
+      SQL.Clear;
+      SQL.Add('SELECT * FROM MG_list');
+      SQL.Add('WHERE (((MG_list.kodval) Is Null)) OR (((MG_list.kodotpr) Is Null)) OR (((MG_list.kodvipl) Is Null)) OR (((MG_list.kodmspk) Is Null)) OR (((MG_list.agent_new) Is Null)) OR (((MG_list.kodmspk) Is Null));');
+
+   end;
+   Zapros.Open;
+   DataSource2.DataSet:=Zapros;
+
+end;
+
+procedure Tmainform.N66Click(Sender: TObject);
+var Zapros:TADOQuery;
+begin
+   PageControl1.ActivePage:=PageControl1.Pages[0];
+   Zapros:=TADOQuery.Create(nil);
+   Zapros.Connection:=ADOConnection1;
+   with Zapros do
+   begin
+      SQL.Clear;
+      SQL.Add('SELECT distinct third.AGENTNUM as agent_new FROM Import\wu.third');
+      SQL.Add('WHERE (((third.agent_new) Is Null));');
+   end;
+   Zapros.Open;
+   DataSource1.DataSet:=Zapros;
 
 end;
 
