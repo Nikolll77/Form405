@@ -224,6 +224,9 @@ private
     //10.8.6
     procedure MG_ImportFromBase;
     procedure createDATAMG;
+    //11.0.1.18
+    function checkCodVal(code:string):boolean;
+    function checkCodCountry(code:string):boolean;
 end;
 
 var mainform: Tmainform;
@@ -232,6 +235,48 @@ implementation
 
 uses Unit39, Unit22, Filt, ProcessForm, Math;
 {$R *.dfm}
+
+function Tmainform.checkCodVal(code:string):boolean;
+var Zapros:TADOQuery;
+begin
+result:=false;
+
+   Zapros:=TADOQuery.Create(nil);
+   Zapros.Connection:=ADOConnection1;
+
+   with zapros do
+   begin
+      SQL.Clear;
+      SQL.Add('SELECT count(R030) as res from R030');
+      SQL.Add('WHERE R030="'+code+'"');
+      open;
+   end;
+
+   if Zapros['res']>=1 then
+            result:=true;
+   FreeAndNil(zapros);
+
+end;
+
+function Tmainform.checkCodCountry(code:string):boolean;
+var Zapros:TADOQuery;
+begin
+result:=false;
+
+   Zapros:=TADOQuery.Create(nil);
+   Zapros.Connection:=ADOConnection1;
+
+   with zapros do
+   begin
+      SQL.Clear;
+      SQL.Add('SELECT count(K040) as res from K040');
+      SQL.Add('WHERE K040="'+code+'"');
+      open;
+   end;
+
+   if Zapros['res']>=1 then result:=true;
+   FreeAndNil(zapros); 
+end;
 
 procedure Tmainform.createDATAMG;
 var Zapros:TADOQuery;
@@ -1090,18 +1135,38 @@ ZZZZZZZZZZ:=Zapros['agent_new'];
 
 
        VVV:=Zapros['kodval'];
+{  check val}
+       if not checkCodVal(VVV) then
+       begin
+              ProcessFrm.Memo1.Lines.add('Код валюты '+VVV+' не верный!');
+              errors:=true;
+              Break;
+       end;
        MMM:=Zapros['kodotpr'];
+{  check country}
+       if not checkCodCountry(MMM) then
+       begin
+              ProcessFrm.Memo1.Lines.add('Код страны '+MMM+' не верный!');
+              errors:=true;
+              Break;
+       end;
        i:=Zapros['obl'];
 
             if MMM='804' then
        KKK:=Format('%.3d', [i]) else KKK:='000';
        DDD:=Zapros['kodvipl'];
+{  check country}
+       if not checkCodCountry(DDD) then
+       begin
+              ProcessFrm.Memo1.Lines.add('Код страны '+DDD+' не верный!');
+              errors:=true;
+              Break;
+       end;
+
              if DDD='804' then
        PPP:='000' else PPP:=Format('%.3d', [i]);
        except
           ProcessFrm.Memo1.Lines.add('Ошибка чтения данных! Проверьте на ошибки!');
-          resstr:=LW1+CC+F+A+ZZZZZZZZZZ+NN+VVV+MMM+KKK+DDD+PPP;
-          ProcessFrm.Memo1.Lines.add(resstr);
           errors:=true;
           Break;
        end;
@@ -1135,6 +1200,8 @@ ZZZZZZZZZZ:=Zapros['agent_new'];
    end
    else
    begin
+      resstr:=LW1+CC+F+A+ZZZZZZZZZZ+NN+VVV+MMM+KKK+DDD+PPP;
+      ProcessFrm.Memo1.Lines.add(resstr);
       DeleteFile(filename);
       ProcessFrm.Memo1.Lines.add('Файл Е9 НЕ создан!');
    end;
