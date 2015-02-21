@@ -1162,9 +1162,10 @@ ZZZZZZZZZZ:=Zapros['agent_new'];
               errors:=true;
               Break;
        end;
-
              if DDD='804' then
-       PPP:='000' else PPP:=Format('%.3d', [i]);
+       PPP:=Format('%.3d', [i]) else PPP:='000';
+       if (MMM='804') and (DDD='804') then PPP:='000';
+
        except
           ProcessFrm.Memo1.Lines.add('Ошибка чтения данных! Проверьте на ошибки!');
           errors:=true;

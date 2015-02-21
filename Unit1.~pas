@@ -1144,7 +1144,7 @@ ZZZZZZZZZZ:=Zapros['agent_new'];
        end;
        MMM:=Zapros['kodotpr'];
 {  check country}
-       if not checkCodVal(MMM) then
+       if not checkCodCountry(MMM) then
        begin
               ProcessFrm.Memo1.Lines.add('Код страны '+MMM+' не верный!');
               errors:=true;
@@ -1156,15 +1156,16 @@ ZZZZZZZZZZ:=Zapros['agent_new'];
        KKK:=Format('%.3d', [i]) else KKK:='000';
        DDD:=Zapros['kodvipl'];
 {  check country}
-       if not checkCodVal(DDD) then
+       if not checkCodCountry(DDD) then
        begin
               ProcessFrm.Memo1.Lines.add('Код страны '+DDD+' не верный!');
               errors:=true;
               Break;
        end;
-
              if DDD='804' then
-       PPP:='000' else PPP:=Format('%.3d', [i]);
+       PPP:=Format('%.3d', [i]) else PPP:='000';
+       if (MMM='804') and (DDD='804') then PPP:='000';
+
        except
           ProcessFrm.Memo1.Lines.add('Ошибка чтения данных! Проверьте на ошибки!');
           errors:=true;
