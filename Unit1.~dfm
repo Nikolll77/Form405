@@ -94,7 +94,7 @@ object mainform: Tmainform
     Top = 33
     Width = 915
     Height = 575
-    ActivePage = TabSheet7
+    ActivePage = TabSheet9
     Align = alClient
     HotTrack = True
     MultiLine = True

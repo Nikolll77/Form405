@@ -1167,7 +1167,7 @@ ZZZZZZZZZZ:=Zapros['agent_new'];
        if (MMM='804') and (DDD='804') then PPP:='000';
 
        except
-          ProcessFrm.Memo1.Lines.add('Ошибка чтения данных! Проверьте на ошибки!');
+          ProcessFrm.Memo1.Lines.add('Ошибка чтения данных! Проверьте ошибки! Возможно есть пустые поля!');
           errors:=true;
           Break;
        end;
@@ -2505,7 +2505,7 @@ begin
    Zapros.SQL.Clear;
    Zapros.SQL.Add('Update data set sumper=round(sumper,2);');
    Zapros.ExecSQL;
-   Zapros.SQL.Clear;
+ {  Zapros.SQL.Clear;
    Zapros.SQL.Add('Update data set kodvipl="499" WHERE kodvipl="891";');
    Zapros.ExecSQL;
    Zapros.SQL.Clear;
@@ -2522,7 +2522,7 @@ begin
    Zapros.ExecSQL;
    Zapros.SQL.Clear;
    Zapros.SQL.Add('Update data set kodotpr="729" WHERE kodotpr="736";');
-   Zapros.ExecSQL;
+   Zapros.ExecSQL;}
    Zapros.Free;
    showmessage('Обработка завершена!');
 end;
