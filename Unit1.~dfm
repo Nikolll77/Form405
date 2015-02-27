@@ -1,10 +1,10 @@
 object mainform: Tmainform
-  Left = 221
-  Top = 167
+  Left = 402
+  Top = 214
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = '405 '#1060#1086#1088#1084#1072
-  ClientHeight = 632
+  ClientHeight = 548
   ClientWidth = 915
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -57,7 +57,7 @@ object mainform: Tmainform
   end
   object Panel2: TPanel
     Left = 0
-    Top = 608
+    Top = 524
     Width = 915
     Height = 24
     Align = alBottom
@@ -93,7 +93,7 @@ object mainform: Tmainform
     Left = 0
     Top = 33
     Width = 915
-    Height = 575
+    Height = 491
     ActivePage = TabSheet9
     Align = alClient
     HotTrack = True
@@ -602,7 +602,7 @@ object mainform: Tmainform
         Left = 0
         Top = 0
         Width = 907
-        Height = 547
+        Height = 463
         Align = alClient
         Color = 16776176
         DataSource = DataSource5

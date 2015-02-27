@@ -1,6 +1,6 @@
 object mPreviewForm: TmPreviewForm
-  Left = 244
-  Top = 144
+  Left = 434
+  Top = 220
   Width = 738
   Height = 531
   Caption = #1055#1088#1077#1076#1074#1072#1088#1080#1090#1077#1083#1100#1085#1099#1081' '#1087#1088#1086#1089#1084#1086#1090#1088
@@ -17,8 +17,8 @@ object mPreviewForm: TmPreviewForm
   object Memo1: TMemo
     Left = 0
     Top = 73
-    Width = 730
-    Height = 424
+    Width = 722
+    Height = 420
     Align = alClient
     Color = clWhite
     Font.Charset = DEFAULT_CHARSET
@@ -36,7 +36,7 @@ object mPreviewForm: TmPreviewForm
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 730
+    Width = 722
     Height = 42
     AutoSize = True
     ButtonHeight = 38
@@ -74,7 +74,7 @@ object mPreviewForm: TmPreviewForm
   object Panel1: TPanel
     Left = 0
     Top = 42
-    Width = 730
+    Width = 722
     Height = 31
     Align = alTop
     BevelInner = bvRaised

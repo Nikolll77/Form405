@@ -8,7 +8,8 @@ uses
   Unit14 in 'Unit14.pas' {mPreviewForm},
   Unit22 in 'Unit22.pas',
   SimpleXML in 'SimpleXML.pas',
-  ProcessForm in 'ProcessForm.pas' {ProcessFrm};
+  ProcessForm in 'ProcessForm.pas' {ProcessFrm},
+  datetdialog in 'datetdialog.pas' {DateDialog};
 
 {$R *.res}
 
@@ -19,5 +20,6 @@ begin
   Application.CreateForm(TPreview39, Preview39);
   Application.CreateForm(TmPreviewForm, mPreviewForm);
   Application.CreateForm(TProcessFrm, ProcessFrm);
+  Application.CreateForm(TDateDialog, DateDialog);
   Application.Run;
 end.

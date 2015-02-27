@@ -222,7 +222,7 @@ private
   public
     { Public declarations }
     //10.8.6
-    procedure MG_ImportFromBase;
+    procedure MG_ImportFromBase(datefrom, dateto:TDateTime);
     procedure createDATAMG;
     //11.0.1.18
     function checkCodVal(code:string):boolean;
@@ -233,7 +233,7 @@ var mainform: Tmainform;
 
 implementation
 
-uses Unit39, Unit22, Filt, ProcessForm, Math;
+uses Unit39, Unit22, Filt, ProcessForm, Math, datetdialog;
 {$R *.dfm}
 
 function Tmainform.checkCodVal(code:string):boolean;
@@ -299,7 +299,7 @@ begin
 end;
 
 
-procedure Tmainform.MG_ImportFromBase;
+procedure Tmainform.MG_ImportFromBase(datefrom, dateto:TDateTime);
 var Zapros:TADOQuery;
 begin
    Zapros:=TADOQuery.Create(nil);
@@ -318,13 +318,17 @@ begin
 
 
    Zapros.SQL.Clear;
-   Zapros.SQL.Add('SELECT AgentPNumb,AgentPName,"04" as kodmspk,codeCurrency as kodval,"804" as kodotpr, countryISO as kodvipl,1 as kolper,faceAmount as sumper, c_reg as obl INTO data\1.MG_TMP_S ');
-   Zapros.SQL.Add('FROM Import\base.Send');
+   Zapros.SQL.Add('SELECT transactionDateTime as dateoper,AgentPNumb,AgentPName,"04" as kodmspk,codeCurrency as kodval,"804" as kodotpr, countryISO as kodvipl,1 as kolper,faceAmount as sumper, c_reg as obl INTO data\1.MG_TMP_S ');
+   Zapros.SQL.Add('FROM Import\base.Send as snd ');
+   Zapros.SQL.Add('WHERE (snd.transactionDateTime>=#'+ FormatDateTime('mm-dd-yyyy',datefrom)+ '#) ');
+   Zapros.SQL.Add('and (snd.transactionDateTime<=#'+ FormatDateTime('mm-dd-yyyy',dateto)+ '#) ');
    Zapros.ExecSQL;
 
    Zapros.SQL.Clear;
-   Zapros.SQL.Add('SELECT AgentPNumb,AgentPName,"04" as kodmspk,codeCurrency as kodval,countryLegasy as kodotpr, "804" as kodvipl,1 as kolper,receiveAmount as sumper, c_reg as obl INTO data\1.MG_TMP_R ');
-   Zapros.SQL.Add('FROM Import\base.Receive');
+   Zapros.SQL.Add('SELECT transactionDateTime as dateoper,AgentPNumb,AgentPName,"04" as kodmspk,codeCurrency as kodval,countryLegasy as kodotpr, "804" as kodvipl,1 as kolper,receiveAmount as sumper, c_reg as obl INTO data\1.MG_TMP_R ');
+   Zapros.SQL.Add('FROM Import\base.Receive as rcv');
+   Zapros.SQL.Add('WHERE (rcv.transactionDateTime>=#'+ FormatDateTime('mm-dd-yyyy',datefrom)+ '#) ');
+   Zapros.SQL.Add('and (rcv.transactionDateTime<=#'+ FormatDateTime('mm-dd-yyyy',dateto)+ '#) ');
    Zapros.ExecSQL;
 
    FreeAndNil(Zapros);
@@ -1619,9 +1623,17 @@ var s,ss,str,kodval,kodotpr,kodvipl:string;
     Zapros:TADOQuery;
     fv:textfile;
     flag:boolean;
+    mr:integer;
 begin
    s := GetCurrentDir;
-   MG_ImportFromBase;
+
+
+   mr:=DateDialog.ShowModal;
+   If mr=mrOk then
+   begin
+       MG_ImportFromBase(DateDialog.DateTimePicker1.DateTime,DateDialog.DateTimePicker2.DateTime);
+       ShowMessage('MG импортовано!');
+   end;
 
    
 {    if MessageDlg('Очистить базу перед импортом?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
